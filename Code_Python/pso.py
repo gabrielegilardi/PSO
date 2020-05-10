@@ -7,7 +7,6 @@ Particle Swarm Optimization
 import numpy as np
 from math import sqrt
 
-
 def PSO(func, LB, UB, nPop=40, epochs=500, K=0, phi=2.05, vel_fact=0.5,
         conf_type='RB', IntVar=None, normalize=False, args=None):
     """
@@ -46,7 +45,7 @@ def PSO(func, LB, UB, nPop=40, epochs=500, K=0, phi=2.05, vel_fact=0.5,
     w = 1.0 / (phi - 1.0 + sqrt(phi**2 - 2.0 * phi))
     cmax = w * phi
 
-    # Probability a particle is an informant
+    # Probability an agent is an informant
     p_informant = 1.0 - (1.0 - 1.0 / float(nPop)) ** K
 
     # Normalize search space if requested

@@ -11,12 +11,12 @@
 - The code has been written and tested in Python 3.7.7.
 - Particle Swarm Optimization (PSO) implementation for minimization problems.
 - Variables can be real, integer, or mixed real/integer.
-- Confidence coefficients depending on one single parameter.
+- Confidence coefficients depend on one single parameter.
 - Search space can be normalized to improve convergency.
 - An adaptive random topology is used to define each agent's neighbourhood (with an option to use the full swarm as neighbourhood).
 - Unbiased velocity equation using hyperspherical uniform distribution (including the corner case where an agent is the neighbourhood best).
 - Three velocity confinement methods (hyperbolic, random-back, and mixed hyperbolic/random-back).
-- Possibility to specify max. and min. velocity limits.
+- Possibility to specify the velocity limits.
 - To improve the execution speed the algorithm has been designed without any loop on the agents.
 - An arbitrary number of parameters can be passed (in a tuple) to the function to minimize.
 - Option to run sequential tests with constant or random (uniformly distributed) number of agents.
@@ -25,7 +25,7 @@
 
 ## Parameters
 
-`func` Function to minimize (see *test.py* for examples). The array passed to the function has dimensions `(nPop,nVar)`, so if possible the function should evaluate all agents without using loops.
+`func` Function to minimize (see *test.py* for examples). The position of all agents is passed to the function at the same time.
 
 `LB`, `UB` Lower and upper boundaries of the search space.
 
@@ -39,11 +39,11 @@
 
 `conf_type` Confinement type (on the velocities): `HY=` hyperbolic, `RB=` random-back, `MX=` mixed hyeperbolic/random-back.
 
-`IntVar` List of indexes specifying which variable should be treated as integers. If all variables are real set `IntVar=None`, if all variables are integer set `IntVar=all`. Indexes are in the range `(1,nVar)`.
+`IntVar` List of indexes specifying which variable should be treated as integer. If all variables are real set `IntVar=None`, if all variables are integer set `IntVar=all`. Indexes are in the range `(1,nVar)`.
 
 `normalize` Specifies if the search space should be normalized (to improve convergency).
 
-`args` Tuple containing any parameter that needs to be passed to the function to minimize. If no parameters then `args=None`.
+`args` Tuple containing any parameter that needs to be passed to the function to minimize. If no parameters are passed set `args=None`.
 
 `nVar` Number of variables (dimensions of the search space).
 
@@ -61,4 +61,4 @@ There are four examples: Parabola, Alpine, Tripod, and Ackley (see *test.py* for
 
 - **Parabola**, **Tripod**, and **Ackley** are examples where parameters (respectively, array `X0`, scalars `kx` and `ky`, and array `X0`) are passed using `args`.
 
-- The global minimum for **Parabola** and **Ackley** is at `X0`; the global minimum for **Alpine** is at zero; the global minimum for **Tripod** is in `[0,-ky]` with local minimum at `[-kx,+ky]` and `[+kx,+ky]`.
+- The global minimum for **Parabola** and **Ackley** is at `X0`; the global minimum for **Alpine** is at zero; the global minimum for **Tripod** is at `[0,-ky]` with local minimum at `[-kx,+ky]` and `[+kx,+ky]`.

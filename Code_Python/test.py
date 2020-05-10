@@ -1,5 +1,5 @@
 """
-Particle Swarm Optimization (PSO)           
+Particle Swarm Optimization (PSO)
 
 (c) 2020 Gabriele Gilardi
 
@@ -269,7 +269,7 @@ for run in range(nRun):
     X, F = PSO(func, LB, UB, nPop=nPop, epochs=epochs, K=K, phi=phi,
                vel_fact=vel_fact, conf_type=conf_type, IntVar=IntVar,
                normalize=normalize, args=args)
-    
+
     # Save best position/cost for each run
     best_pos[run, :] = X
     best_cost[run] = F

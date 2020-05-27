@@ -32,11 +32,12 @@ Characteristics
   to minimize.
 - Option to run sequential tests with constant or random (uniformly distributed)
   number of agents.
-- Four examples are included: Parabola, Alpine, Tripod, and Ackley.
-- Usage: python test.py.
+- Usage: python test.py <example>.
 
 Parameters
 ----------
+example
+    Name of the example to run (Parabola, Alpine, Tripod, and Ackley.)
 func
     Function to minimize. The position of all agents is passed to the function
     at the same time.
@@ -89,17 +90,14 @@ There are four examples: Parabola, Alpine, Tripod, and Ackley.
 """
 
 import sys
-import time
 import numpy as np
 from pso import PSO
 
-# ======= Examples ======= #
-
-# Un-comment the desired example
-example = 'Parabola'
-# example = 'Alpine'
-# example = 'Tripod'
-# example = 'Ackley'
+# Read example to run
+if len(sys.argv) != 2:
+    print("Usage: python test.py <example>")
+    sys.exit(1)
+example = sys.argv[1]
 
 # Parabola: F(X) = sum((X - X0)^2), Xmin = X0
 if (example == 'Parabola'):
@@ -259,7 +257,6 @@ print("Function: ", example)
 
 best_pos = np.zeros((nRun, nVar))
 best_cost = np.zeros(nRun)
-t_start = time.perf_counter()
 
 # Run cases
 for run in range(nRun):
@@ -281,8 +278,6 @@ for run in range(nRun):
     else:
         print("run = {0:<3d}     nPop = {1:<3d}".format(run+1, nPop))
 
-t_end = time.perf_counter()
-
 # Results
 best_pos_mean = best_pos.mean(axis=0)
 best_pos_std = best_pos.std(axis=0)
@@ -298,5 +293,3 @@ print()
 if (Xsol is not None):
     error = np.linalg.norm(Xsol - best_pos_mean)
     print("Error: {0:e}".format(error))
-print()
-print("Total run time = {0:<7.2f}".format(t_end - t_start))

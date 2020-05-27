@@ -20,12 +20,13 @@
 - To improve the execution speed the algorithm has been designed without any loop on the agents.
 - An arbitrary number of parameters can be passed (in a tuple) to the function to minimize.
 - Option to run sequential tests with constant or random (uniformly distributed) number of agents.
-- Four examples are included: Parabola, Alpine, Tripod, and Ackley.
-- Usage: *python test.py*.
+- Usage: *python test.py example*.
 
 ## Parameters
 
-`func` Function to minimize (see *test.py* for examples). The position of all agents is passed to the function at the same time.
+`example` Name of the example to run (Parabola, Alpine, Tripod, and Ackley.)
+
+`func` Function to minimize. The position of all agents is passed to the function at the same time.
 
 `LB`, `UB` Lower and upper boundaries of the search space.
 

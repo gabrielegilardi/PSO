@@ -11,6 +11,7 @@
 - The code has been written and tested in Python 3.7.7.
 - Particle Swarm Optimization (PSO) implementation for minimization problems.
 - Variables can be real, integer, or mixed real/integer.
+- Variables can be constrained to a specific interval or value setting the lower and the upper boundaries.  
 - Confidence coefficients depend on one single parameter.
 - Search space can be normalized to improve convergency.
 - An adaptive random topology is used to define each agent's neighbourhood (with an option to use the full swarm as neighbourhood).
@@ -43,6 +44,8 @@
 `IntVar` List of indexes specifying which variable should be treated as integer. If all variables are real set `IntVar=None`, if all variables are integer set `IntVar=all`. Indexes are in the range `(1,nVar)`.
 
 `normalize` Specifies if the search space should be normalized (to improve convergency).
+
+`rad` Normalized radius of the hypersphere centered on the best particle. The higher the number of other particles inside and the better is the solution.
 
 `args` Tuple containing any parameter that needs to be passed to the function to minimize. If no parameters are passed set `args=None`.
 

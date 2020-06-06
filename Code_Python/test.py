@@ -61,6 +61,9 @@ IntVar
     set IntVar='all'. Indexes are in the range (1,nVar).
 normalize = True, False
     Specifies if the search space should be normalized.
+0 < rad < 1
+    Normalized radius of the hypersphere centered on the best particle. The
+    higher the number of other particles inside and the better is the solution.
 args
     Tuple containing any parameter that needs to be passed to the function. If
     no parameters are passed set args=None.
@@ -125,6 +128,7 @@ if (example == 'Parabola'):
     conf_type = 'RB'
     IntVar = None
     normalize = False
+    rad = 0.1
     args = (X0)
 
     # Solution
@@ -154,6 +158,7 @@ elif (example == 'Alpine'):
     conf_type = 'RB'
     IntVar = None
     normalize = False
+    rad = 0.1
     args = None
 
     # Solution
@@ -196,6 +201,7 @@ elif (example == 'Tripod'):
     conf_type = 'RB'
     IntVar = None
     normalize = False
+    rad = 0.1
     args = (kx, ky)
 
     # Solution
@@ -232,6 +238,7 @@ elif (example == 'Ackley'):
     conf_type = 'RB'
     IntVar = None
     normalize = True
+    rad = 0.1
     args = (X0)
 
     # Solution
@@ -263,18 +270,19 @@ for run in range(nRun):
 
     # Optimize this run
     nPop = agents[run]
-    X, F = PSO(func, LB, UB, nPop=nPop, epochs=epochs, K=K, phi=phi,
-               vel_fact=vel_fact, conf_type=conf_type, IntVar=IntVar,
-               normalize=normalize, args=args)
+    X, info = PSO(func, LB, UB, nPop=nPop, epochs=epochs, K=K, phi=phi,
+                  vel_fact=vel_fact, conf_type=conf_type, IntVar=IntVar,
+                  normalize=normalize, rad=rad, args=args)
 
     # Save best position/cost for each run
     best_pos[run, :] = X
-    best_cost[run] = F
+    best_cost[run] = info[0]
 
-    # Print run number, agents number, and the error
+    # Print run number, agents number, error, and number of particles in close
+    # proximity
     if (Xsol is not None):
-        print("run = {0:<3d}     nPop = {1:<3d}     Error: {2:e}"
-              .format(run+1, nPop, np.linalg.norm(Xsol - X)))
+        print("run = {0:<3d}   nPop = {1:<3d}   Error: {2:e}   Close = {3:<3d}"
+              .format(run+1, nPop, np.linalg.norm(Xsol - X), info[2]))
     else:
         print("run = {0:<3d}     nPop = {1:<3d}".format(run+1, nPop))
 

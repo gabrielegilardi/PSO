@@ -5,10 +5,10 @@ Copyright (c) 2020 Gabriele Gilardi
 """
 
 import numpy as np
-from math import sqrt
+
 
 def PSO(func, LB, UB, nPop=40, epochs=500, K=0, phi=2.05, vel_fact=0.5,
-        conf_type='RB', IntVar=None, normalize=False, args=None):
+        conf_type='RB', IntVar=None, normalize=False, rad=0.1, args=None):
     """
     func            Function to minimize
     LB              Lower boundaries of the search space
@@ -24,6 +24,8 @@ def PSO(func, LB, UB, nPop=40, epochs=500, K=0, phi=2.05, vel_fact=0.5,
                     as integers
     normalize       Specifies if the search space should be normalized (to
                     improve convergency)
+    rad             Normalized radius of the hypersphere centered on the best
+                    particle.
     args            Tuple containing any parameter that needs to be passed to
                     the function
 
@@ -42,7 +44,7 @@ def PSO(func, LB, UB, nPop=40, epochs=500, K=0, phi=2.05, vel_fact=0.5,
     vel_min = - vel_max
 
     # Confidence coefficients
-    w = 1.0 / (phi - 1.0 + sqrt(phi**2 - 2.0 * phi))
+    w = 1.0 / (phi - 1.0 + np.sqrt(phi**2 - 2.0 * phi))
     cmax = w * phi
 
     # Probability an agent is an informant
@@ -90,6 +92,7 @@ def PSO(func, LB, UB, nPop=40, epochs=500, K=0, phi=2.05, vel_fact=0.5,
     idx = np.argmin(agent_best_cost)
     swarm_best_pos = agent_best_pos[idx, :]
     swarm_best_cost = agent_best_cost[idx]
+    swarm_best_idx = idx
 
     # Initial best position of each agent using the swarm
     if (K == 0):
@@ -165,6 +168,7 @@ def PSO(func, LB, UB, nPop=40, epochs=500, K=0, phi=2.05, vel_fact=0.5,
         if (agent_best_cost[idx] < swarm_best_cost):
             swarm_best_pos = agent_best_pos[idx, :]
             swarm_best_cost = agent_best_cost[idx]
+            swarm_best_idx = idx
 
         # If the best cost of the swarm did not improve ....
         else:
@@ -187,11 +191,24 @@ def PSO(func, LB, UB, nPop=40, epochs=500, K=0, phi=2.05, vel_fact=0.5,
             group_best_pos, p_equal_g, = group_best(informants, agent_best_pos,
                                                     agent_best_cost)
 
-    # If necessary denormalize swarm best position
+    # If necessary de-normalize and determine the (normalized) distance between
+    # the best particle and all the others
     if (normalize):
+        delta = agent_best_pos - swarm_best_pos         # (UB-LB = 1)
         swarm_best_pos = LB_orig + swarm_best_pos * (UB_orig - LB_orig)
+    else:
+        deltaB = np.fmax(UB-LB, 1.e-10)             # To avoid /0 when LB = UB
+        delta = (agent_best_pos - swarm_best_pos) / deltaB
 
-    return swarm_best_pos, swarm_best_cost
+    # Number of particles in the hypersphere of radius <rad> around the best
+    # particle
+    dist = np.linalg.norm(delta, axis=1)
+    in_rad = (dist < rad).sum()
+
+    # Return info about the solution
+    info = (swarm_best_cost, swarm_best_idx, in_rad)
+
+    return swarm_best_pos, info
 
 
 def group_best(informants, agent_best_pos, agent_best_cost):

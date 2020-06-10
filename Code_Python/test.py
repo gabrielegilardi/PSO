@@ -1,5 +1,5 @@
 """
-Particle Swarm Optimization (PSO)
+Particle Swarm Optimization (PSO).
 
 Copyright (c) 2020 Gabriele Gilardi
 

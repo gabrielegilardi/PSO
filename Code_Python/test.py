@@ -1,5 +1,5 @@
 """
-Particle Swarm Optimization (PSO).
+Metaheuristic Minimization Using Particle Swarm Optimization.
 
 Copyright (c) 2020 Gabriele Gilardi
 
@@ -15,7 +15,8 @@ References
 Characteristics
 ---------------
 - The code has been written and tested in Python 3.7.7.
-- Particle Swarm Optimization (PSO) implementation for minimization problems.
+- Particle Swarm Optimization (PSO) implementation for metaheuristic
+  minimization.
 - Variables can be real, integer, or mixed real/integer.
 - Confidence coefficients depend on one single parameter.
 - Search space can be normalized to improve convergency.

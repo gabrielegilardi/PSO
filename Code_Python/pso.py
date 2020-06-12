@@ -1,5 +1,5 @@
 """
-Particle Swarm Optimization.
+Metaheuristic Minimization Using Particle Swarm Optimization.
 
 Copyright (c) 2020 Gabriele Gilardi
 """

@@ -18,6 +18,7 @@
 - Unbiased velocity equation using hyperspherical uniform distribution (including the corner case where an agent is the neighbourhood best).
 - Three velocity confinement methods (hyperbolic, random-back, and mixed hyperbolic/random-back).
 - Possibility to specify the velocity limits.
+- Possibility to specify an initial position for the agents.
 - To improve the execution speed the algorithm has been designed without any loop on the agents.
 - An arbitrary number of parameters can be passed (in a tuple) to the function to minimize.
 - Option to run sequential tests with constant or random (uniformly distributed) number of agents.
@@ -48,6 +49,8 @@
 `rad` Normalized radius of the hypersphere centered on the best particle. The higher the number of other particles inside and the better is the solution.
 
 `args` Tuple containing any parameter that needs to be passed to the function to minimize. If no parameters are passed set `args=None`.
+
+`Xinit` Initial position of each agent.
 
 `nVar` Number of variables (dimensions of the search space).
 

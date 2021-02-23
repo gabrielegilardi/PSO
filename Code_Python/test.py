@@ -27,12 +27,13 @@ Characteristics
 - Three velocity confinement methods (hyperbolic, random-back, and mixed
   hyperbolic/random-back).
 - Possibility to specify the velocity limits.
-- To improve the execution speed the algorithm has been designed without any
-  loop on the agents.
-- An arbitrary number of parameters can be passed (in a tuple) to the function
-  to minimize.
-- Option to run sequential tests with constant or random (uniformly distributed)
-  number of agents.
+- Possibility to specify an initial position for the agents.
+- To improve the execution speed the algorithm has been designed without
+  any loop on the agents.
+- An arbitrary number of parameters can be passed (in a tuple) to the
+  function to minimize.
+- Option to run sequential tests with constant or random (uniformly
+  distributed) number of agents.
 - Usage: python test.py <example>.
 
 Parameters
@@ -68,6 +69,8 @@ normalize = True, False
 args
     Tuple containing any parameter that needs to be passed to the function. If
     no parameters are passed set args=None.
+Xinit
+    Initial position of each agent.
 nVar
     Number of variables.
 nRun
@@ -131,6 +134,7 @@ if (example == 'Parabola'):
     normalize = False
     rad = 0.1
     args = (X0)
+    Xinit = None
 
     # Solution
     Xsol = X0
@@ -161,6 +165,7 @@ elif (example == 'Alpine'):
     normalize = False
     rad = 0.1
     args = None
+    Xinit = None
 
     # Solution
     Xsol = np.zeros(nVar)
@@ -194,7 +199,7 @@ elif (example == 'Tripod'):
     func = Tripod
     UB = np.ones(nVar) * 100.0
     LB = - UB
-    nPop = 40
+    nPop = 100
     epochs = 500
     K = 3
     phi = 2.05
@@ -204,6 +209,7 @@ elif (example == 'Tripod'):
     normalize = False
     rad = 0.1
     args = (kx, ky)
+    Xinit = None
 
     # Solution
     Xsol = np.array([0.0, -ky])
@@ -231,7 +237,7 @@ elif (example == 'Ackley'):
     func = Ackley
     UB = np.ones(nVar) * 30.0
     LB = - UB
-    nPop = 40
+    nPop = 100
     epochs = 500
     K = 3
     phi = 2.05
@@ -241,6 +247,7 @@ elif (example == 'Ackley'):
     normalize = True
     rad = 0.1
     args = (X0)
+    Xinit = None
 
     # Solution
     Xsol = X0
@@ -273,7 +280,7 @@ for run in range(nRun):
     nPop = agents[run]
     X, info = PSO(func, LB, UB, nPop=nPop, epochs=epochs, K=K, phi=phi,
                   vel_fact=vel_fact, conf_type=conf_type, IntVar=IntVar,
-                  normalize=normalize, rad=rad, args=args)
+                  normalize=normalize, rad=rad, args=args, Xinit=Xinit)
 
     # Save best position/cost for each run
     best_pos[run, :] = X

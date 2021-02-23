@@ -1,14 +1,16 @@
 """
-Metaheuristic Minimization Using Particle Swarm Optimization.
+Multivariate Regression and Classification Using an Adaptive Neuro-Fuzzy
+Inference System (Takagi-Sugeno) and Particle Swarm Optimization.
 
-Copyright (c) 2020 Gabriele Gilardi
+Copyright (c) 2021 Gabriele Gilardi
 """
 
 import numpy as np
 
 
 def PSO(func, LB, UB, nPop=40, epochs=500, K=0, phi=2.05, vel_fact=0.5,
-        conf_type='RB', IntVar=None, normalize=False, rad=0.1, args=None):
+        conf_type='RB', IntVar=None, normalize=False, rad=0.1, args=None,
+        Xinit=None):
     """
     func            Function to minimize
     LB              Lower boundaries of the search space
@@ -25,12 +27,14 @@ def PSO(func, LB, UB, nPop=40, epochs=500, K=0, phi=2.05, vel_fact=0.5,
     normalize       Specifies if the search space should be normalized (to
                     improve convergency)
     rad             Normalized radius of the hypersphere centered on the best
-                    particle.
+                    particle
     args            Tuple containing any parameter that needs to be passed to
                     the function
+    Xinit           Initial position of each agent
 
     Dimensions:
     (nVar, )        LB, UB, LB_orig, UB_orig, vel_max, vel_min, swarm_best_pos
+                    Xinit
     (nPop, nVar)    agent_pos, agent_vel, agent_best_pos, Gr, group_best_pos,
                     agent_pos_orig, agent_pos_tmp, vel_conf, out, x_sphere, u
     (nPop, nPop)    informants, informants_cost
@@ -50,7 +54,7 @@ def PSO(func, LB, UB, nPop=40, epochs=500, K=0, phi=2.05, vel_fact=0.5,
     # Probability an agent is an informant
     p_informant = 1.0 - (1.0 - 1.0 / float(nPop)) ** K
 
-    # Normalize search space if requested
+    # Normalize search space
     if (normalize):
         LB_orig = LB.copy()
         UB_orig = UB.copy()
@@ -69,7 +73,14 @@ def PSO(func, LB, UB, nPop=40, epochs=500, K=0, phi=2.05, vel_fact=0.5,
         nIntVar = len(IntVar)
 
     # Initial position of each agent
-    agent_pos = LB + np.random.rand(nPop, nVar) * (UB - LB)
+    if (Xinit is None):
+        agent_pos = LB + np.random.rand(nPop, nVar) * (UB - LB)
+    else:
+        if (normalize):
+            agent_pos = (Xinit - LB_orig) / (UB_orig - LB_orig)
+        else:
+            agent_pos = Xinit
+
     if (nIntVar > 0):
         agent_pos[:, IntVar] = np.round(agent_pos[:, IntVar])
 
@@ -213,7 +224,7 @@ def PSO(func, LB, UB, nPop=40, epochs=500, K=0, phi=2.05, vel_fact=0.5,
 
 def group_best(informants, agent_best_pos, agent_best_cost):
     """
-    Determines the group best position of each agent based on the agent
+    Determine the group best position of each agent based on the agent
     informants.
     """
     nPop, nVar = agent_best_pos.shape
@@ -236,7 +247,7 @@ def group_best(informants, agent_best_pos, agent_best_cost):
 
 def hypersphere_point(Gr, agent_pos):
     """
-    For each agent determines a random point inside the hypersphere (Gr,|Gr-X|),
+    For each agent determine a random point inside the hypersphere (Gr,|Gr-X|),
     where Gr is its center, |Gr-X| is its radius, and X is the agent position.
     """
     nPop, nVar = agent_pos.shape
@@ -259,7 +270,7 @@ def hypersphere_point(Gr, agent_pos):
 
 def hyperbolic_conf(agent_pos, agent_vel, UB, LB):
     """
-    Applies hyperbolic confinement to agent velocities (calculation is done on
+    Apply hyperbolic confinement to agent velocities (calculation is done on
     all agents to avoid loops but the change will be applied only to the agents
     actually outside the search space).
     """
@@ -277,7 +288,7 @@ def hyperbolic_conf(agent_pos, agent_vel, UB, LB):
 
 def random_back_conf(agent_vel):
     """
-    Applies random-back confinement to agent velocities (calculation is done on
+    Apply random-back confinement to agent velocities (calculation is done on
     all agents to avoid loops but the change will be applied only to the agents
     actually outside the search space).
     """
@@ -291,7 +302,7 @@ def random_back_conf(agent_vel):
 
 def mixed_conf(agent_pos, agent_vel, UB, LB):
     """
-    Applies a mixed-type confinement to agent velocities (calculation is done on
+    Apply a mixed-type confinement to agent velocities (calculation is done on
     all agents to avoid loops but the change will be applied only to the agents
     actually outside the search space).
 

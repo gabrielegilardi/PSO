@@ -76,6 +76,7 @@ def PSO(func, LB, UB, nPop=40, epochs=500, K=0, phi=2.05, vel_fact=0.5,
     if (Xinit is None):
         agent_pos = LB + np.random.rand(nPop, nVar) * (UB - LB)
     else:
+        Xinit = np.tile(Xinit, (nPop, 1))
         if (normalize):
             agent_pos = (Xinit - LB_orig) / (UB_orig - LB_orig)
         else:
